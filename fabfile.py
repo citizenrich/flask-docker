@@ -12,11 +12,36 @@ def prep():
 
 def install():
     run('apt-get -qqy update')
-    run('apt-get -qqy install git docker')
+    run('wget -qO- https://get.docker.com/ | sh')
+    run('apt-get -qqy install git')
 
 def update():
     run('apt-get -qq update')
     run('apt-get -qqy upgrade')
+
+def clone():
+    with cd('/root'):
+        env.warn_only = True
+        run('rm -rf flask-docker')
+        sudo('git clone -q https://github.com/citizenrich/flask-docker.git', user='admin')
+
+def whatsup():
+    run('docker ps -l')
+
+def image():
+    with cd('/root/flask-docker'):
+        env.warn_only = True
+        run('docker build -t test .')
+
+def docker():
+    with cd('/root/flask-docker'):
+        run('docker run --name test_instance -i -t test')
+
+#debconf: delaying package configuration, since apt-utils is not installed
+#invoke-rc.d: policy-rc.d denied execution of start.
+#invoke-rc.d: policy-rc.d denied execution of start.
+
+
 
 
 def deploy():
